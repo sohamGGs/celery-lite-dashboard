@@ -1,0 +1,90 @@
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f4f7f6;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    padding-top: 50px;
+}
+
+.container {
+    background: white;
+    width: 800px;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+header h1 {
+    margin: 0;
+    color: #333;
+}
+header p {
+    color: #777;
+    margin-top: 5px;
+}
+
+.control-panel {
+    margin-top: 25px;
+    display: flex;
+    gap: 10px;
+}
+
+input {
+    flex-grow: 1;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 16px;
+}
+
+button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    transition: background 0.2s;
+}
+
+button:hover { background-color: #0056b3; }
+
+.table-container { margin-top: 30px; }
+
+/* Add this class for the delete button */
+.btn-danger {
+    background-color: #dc3545; /* Red color */
+    margin-left: 10px; /* Space between the two buttons */
+}
+
+.btn-danger:hover {
+    background-color: #c82333; /* Darker red on hover */
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th, td {
+    text-align: left;
+    padding: 12px;
+    border-bottom: 1px solid #eee;
+}
+
+th { color: #555; text-transform: uppercase; font-size: 0.85rem; }
+
+/* Status Badges */
+.badge {
+    padding: 5px 10px;
+    border-radius: 15px;
+    font-size: 0.85rem;
+    font-weight: bold;
+    color: white;
+}
+.status-pending { background-color: #ffc107; color: #444; }
+.status-processing { background-color: #17a2b8; }
+.status-completed { background-color: #28a745; }

@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Celery-Lite Dashboard</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <h1>⚡ Celery-Lite Task Queue</h1>
+            <p>System Design Demo: Asynchronous Background Processing</p>
+        </header>
+
+        <div class="control-panel">
+            <div class="control-panel">
+                <input type="text" id="taskName" placeholder="Enter task name (e.g., Generate PDF)...">
+                <button onclick="submitTask()">Add Task to Queue</button>
+                <button onclick="clearHistory()" class="btn-danger">Clear History</button>
+            </div>
+        </div>
+
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Task Name</th>
+                        <th>Status</th>
+                        <th>Created At</th>
+                    </tr>
+                </thead>
+                <tbody id="taskTable">
+                    </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        // 1. Submit a new task
+        async function submitTask() {
+            const nameInput = document.getElementById('taskName');
+            const name = nameInput.value || "Generic Task";
+            
+            await fetch('/add-task', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({name: name})
+            });
+            
+            nameInput.value = ''; // Clear input
+            fetchTasks(); // Refresh immediately
+        }
+
+        // 2. Poll the server for updates every 1 second
+        async function fetchTasks() {
+            const response = await fetch('/tasks');
+            const tasks = await response.json();
+            
+            const tbody = document.getElementById('taskTable');
+            tbody.innerHTML = ''; // Clear current list
+
+            tasks.forEach(task => {
+                const row = document.createElement('tr');
+                // Color code the status
+                let statusClass = '';
+                if(task.status === 'PENDING') statusClass = 'status-pending';
+                if(task.status === 'PROCESSING') statusClass = 'status-processing';
+                if(task.status === 'COMPLETED') statusClass = 'status-completed';
+
+                row.innerHTML = `
+                    <td>#${task.id}</td>
+                    <td>${task.name}</td>
+                    <td><span class="badge ${statusClass}">${task.status}</span></td>
+                    <td>${task.time}</td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        // 3. Clear all history
+        async function clearHistory() {
+            if (!confirm("Are you sure you want to delete all task history?")) return;
+
+            await fetch('/tasks', {
+            method: 'DELETE'
+            });
+    
+    // Refresh the list (which will now be empty)
+    fetchTasks();
+}
+
+        // Start polling
+        setInterval(fetchTasks, 1000);
+        fetchTasks(); // Initial load
+    </script>
+</body>
+</html>
